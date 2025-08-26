@@ -16,10 +16,9 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>services/first-service</module>
-        <module>services/second-service</module>
+        <module>services</module>
         <module>config-server</module>
-        <module>eureka-server</module>
+        <module>discovery-server</module>
     </modules>
 
     <properties>

@@ -1,23 +1,28 @@
+server:
+  port: 0 # ноль - случайный пустой порт
+
 spring:
-  config:
-    import: configserver:http://localhost:8888
   application:
     name: second-service
+  config:
+    import: "configserver:"
   cloud:
     config:
       fail-fast: true
+      discovery:
+        enabled: true
+        service-id: config-server
       retry:
         useRandomPolicy: true
         max-interval: 6000
 
-# Настроки ниже нужны для обращения к серверу Eureka
-# Но эти настройки вынесены в config-server для
-# централизованного хранения и изменения
-# eureka:
-#  client:
-#    register-with-eureka: true
-#    fetch-registry: true
-#    serviceUrl:
-#      defaultZone: http://localhost:8761/eureka/
-# Можно и так:
-#      defaultZone: http://${eureka.instance.hostname:localhost}:${eureka.instance.port:8761}/eureka/
+eureka:
+  instance:
+    instanceId: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+  client:
+    healthcheck:
+      enabled: true
+    register-with-eureka: true
+    fetch-registry: true
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname:localhost}:${eureka.instance.port:8761}/eureka/
